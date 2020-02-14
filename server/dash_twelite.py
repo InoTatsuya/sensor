@@ -6,7 +6,7 @@ from dash.dependencies import Input,Output
 import numpy as np
 import datetime
 import pymysql.cursors
-import param
+import param_server
 
 app = dash.Dash()
 app.layout =  html.Div( children = [
@@ -17,7 +17,7 @@ app.layout =  html.Div( children = [
 	dcc.Graph( id = "live-graph-lux" ),
 	dcc.Interval(
 		id = "interval-component",
-		interval = 60000 * param.WEB_INTERVAL_TWE,
+		interval = 60000 * param_server.WEB_INTERVAL_TWE,
 		n_intervals = 0
 	)
 ])
@@ -69,7 +69,7 @@ def update_live_graph_soil(n):
 	# 現在までの湿度データを取得するSQLを生成
 	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	start_day = (datetime.datetime.now() - datetime.timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
-	li = getData(start_day, end_day, param.ID_SOIL)
+	li = getData(start_day, end_day, param_server.ID_SOIL)
 
 	# dcc.Graphに渡すfigureの作成
 	fig = {
@@ -91,7 +91,7 @@ def update_live_graph_temp(n):
 	# 現在までの湿度データを取得するSQLを生成
 	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	start_day = (datetime.datetime.now() - datetime.timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
-	li = getData(start_day, end_day, param.ID_TEMP)
+	li = getData(start_day, end_day, param_server.ID_TEMP)
 
 	# dcc.Graphに渡すfigureの作成
 	fig = {
@@ -113,7 +113,7 @@ def update_live_graph_hum(n):
 	# 現在までの湿度データを取得するSQLを生成
 	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	start_day = (datetime.datetime.now() - datetime.timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
-	li = getData(start_day, end_day, param.ID_TEMP)
+	li = getData(start_day, end_day, param_server.ID_TEMP)
 
 	# dcc.Graphに渡すfigureの作成
 	fig = {
@@ -135,7 +135,7 @@ def update_live_graph_lux(n):
 	# 現在までの湿度データを取得するSQLを生成
 	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	start_day = (datetime.datetime.now() - datetime.timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
-	li = getData(start_day, end_day, param.ID_LUX)
+	li = getData(start_day, end_day, param_server.ID_LUX)
 
 	# dcc.Graphに渡すfigureの作成
 	fig = {
@@ -151,4 +151,4 @@ def update_live_graph_lux(n):
 	return fig
 
 if __name__ == "__main__":
-	app.run_server(debug=True, host=param.ADDRESS, port=param.WEB_PORT_TWE)
+	app.run_server(debug=True, host=param_server.ADDRESS, port=param_server.WEB_PORT_TWE)

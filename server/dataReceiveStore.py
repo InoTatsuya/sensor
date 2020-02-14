@@ -3,7 +3,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import datetime
 import pymysql.cursors
 import os
-import param
+import param_server
 
 # mysql settings
 connection = pymysql.connect(
@@ -73,6 +73,6 @@ class Handle(BaseHTTPRequestHandler):
         self.wfile.write(responseBody.encode('utf-8'))
 """
 
-httpd = HTTPServer((param.ADDRESS, param.RCV_PORT), Handle)
+httpd = HTTPServer((param_server.ADDRESS, param_server.RCV_PORT), Handle)
 print("sensor-data receiver started")
 httpd.serve_forever()

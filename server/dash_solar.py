@@ -12,9 +12,15 @@ app = dash.Dash()
 app.layout =  html.Div( children = [
 	html.H2( children = "charge-con graph" ),
 	dcc.Graph( id = "live-graph-soc" ),
-	dcc.Graph( id = "live-graph-load" ),
-	dcc.Graph( id = "live-graph-solar" ),
-	dcc.Graph( id = "live-graph-battery" ),
+	dcc.Graph( id = "live-graph-load-v" ),
+	dcc.Graph( id = "live-graph-load-i" ),
+	dcc.Graph( id = "live-graph-load-p" ),
+	dcc.Graph( id = "live-graph-solar-v" ),
+	dcc.Graph( id = "live-graph-solar-i" ),
+	dcc.Graph( id = "live-graph-solar-p" ),
+	dcc.Graph( id = "live-graph-battery-v" ),
+	dcc.Graph( id = "live-graph-battery-i" ),
+	dcc.Graph( id = "live-graph-battery-p" ),
 	dcc.Interval(
 		id = "interval-component",
 		interval = 60000 * param_server.WEB_INTERVAL_SOL,
@@ -60,9 +66,9 @@ def getData(start_day, end_day, id):
 	fetch = c.fetchall()
 	conn.close()
 
-	li = [list(x) for x in zip(*fetch)]
+	ret = [list(x) for x in zip(*fetch)]
 
-	return li
+	return ret
 
 def printTime(str):
 	print(str + ":" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
@@ -70,96 +76,256 @@ def printTime(str):
 @app.callback(Output('live-graph-soc', 'figure'),
 			[Input('interval-component', 'n_intervals')])
 def update_live_graph_soc(n):
-	printTime("SOC1")
+	printTime("SOC-1")
 	# 現在までの湿度データを取得するSQLを生成
 	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	start_day = (datetime.datetime.now() - datetime.timedelta(days=param_server.WEB_DELTA_SOL)).strftime("%Y-%m-%d %H:%M:%S")
-	li = getData(start_day, end_day, 1)
+	li1 = getData(start_day, end_day, 1)
+	li2 = getData(start_day, end_day, 2)
 
 	# dcc.Graphに渡すfigureの作成
 	fig = {
 		"data":[
-			{"x":li[0], "y":li[7], "type":"line", "name":"Power"},
+			{"x":li1[0], "y":li1[7], "type":"line", "name":"ID1"},
+			{"x":li1[0], "y":li1[7], "type":"line", "name":"ID2"},
 		],
 		"layout": {
 			"title":"SOC info"
 		}
 	}
-	printTime("SOC2")
+	printTime("SOC-2")
 
 	return fig
 
-@app.callback(Output('live-graph-load', 'figure'),
+#####################
+# load graph
+#####################
+@app.callback(Output('live-graph-load-v', 'figure'),
 			[Input('interval-component', 'n_intervals')])
-def update_live_graph_load(n):
-	printTime("liad1")
+def update_live_graph_load_v(n):
+	printTime("load_v-1")
 	# 現在までの湿度データを取得するSQLを生成
 	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	start_day = (datetime.datetime.now() - datetime.timedelta(days=param_server.WEB_DELTA_SOL)).strftime("%Y-%m-%d %H:%M:%S")
-	li = getData(start_day, end_day, 1)
+	li1 = getData(start_day, end_day, 1)
+	li2 = getData(start_day, end_day, 2)
 
 	# dcc.Graphに渡すfigureの作成
 	fig = {
 		"data":[
-			{"x":li[0], "y":li[8], "type":"line", "name":"Voltage"},
-			{"x":li[0], "y":li[9], "type":"line", "name":"Current"},
-			{"x":li[0], "y":li[10], "type":"line", "name":"Power"},
+			{"x":li1[0], "y":li1[8], "type":"line", "name":"ID1"},
+			{"x":li2[0], "y":li2[8], "type":"line", "name":"ID2"},
 		],
 		"layout": {
-			"title":"load info"
+			"title":"load voltage info"
 		}
 	}
 	t1 = datetime.datetime.now()
 	t1 = t1.strftime("%Y-%m-%d %H:%M:%S")
 
-	printTime("load2")
+	printTime("load_v-2")
 	return fig
 
-@app.callback(Output('live-graph-solar', 'figure'),
+@app.callback(Output('live-graph-load-i', 'figure'),
 			[Input('interval-component', 'n_intervals')])
-def update_live_graph_solar(n):
+def update_live_graph_load_i(n):
+	printTime("load_i-1")
 	# 現在までの湿度データを取得するSQLを生成
 	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	start_day = (datetime.datetime.now() - datetime.timedelta(days=param_server.WEB_DELTA_SOL)).strftime("%Y-%m-%d %H:%M:%S")
-	li = getData(start_day, end_day, 1)
+	li1 = getData(start_day, end_day, 1)
+	li2 = getData(start_day, end_day, 2)
 
 	# dcc.Graphに渡すfigureの作成
 	fig = {
 		"data":[
-			{"x":li[0], "y":li[1], "type":"line", "name":"Voltage"},
-			{"x":li[0], "y":li[2], "type":"line", "name":"Current"},
-			{"x":li[0], "y":li[3], "type":"line", "name":"Power"},
+			{"x":li1[0], "y":li1[9], "type":"line", "name":"ID1"},
+			{"x":li2[0], "y":li2[9], "type":"line", "name":"ID2"},
 		],
 		"layout": {
-			"title":"solar info"
+			"title":"load current info"
 		}
 	}
+	t1 = datetime.datetime.now()
+	t1 = t1.strftime("%Y-%m-%d %H:%M:%S")
 
-	printTime("solar2")
+	printTime("load_i-2")
 	return fig
 
-@app.callback(Output('live-graph-battery', 'figure'),
+@app.callback(Output('live-graph-load-p', 'figure'),
 			[Input('interval-component', 'n_intervals')])
-def update_live_graph_battery(n):
-	printTime("battery1")
+def update_live_graph_load_p(n):
+	printTime("load_p-1")
 	# 現在までの湿度データを取得するSQLを生成
 	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	start_day = (datetime.datetime.now() - datetime.timedelta(days=param_server.WEB_DELTA_SOL)).strftime("%Y-%m-%d %H:%M:%S")
-	li = getData(start_day, end_day, 1)
+	li1 = getData(start_day, end_day, 1)
+	li2 = getData(start_day, end_day, 2)
 
 	# dcc.Graphに渡すfigureの作成
 	fig = {
 		"data":[
-			{"x":li[0], "y":li[4], "type":"line", "name":"Voltage"},
-			{"x":li[0], "y":li[5], "type":"line", "name":"Current"},
-			{"x":li[0], "y":li[6], "type":"line", "name":"Power"},
+			{"x":li1[0], "y":li1[10], "type":"line", "name":"ID1"},
+			{"x":li2[0], "y":li2[10], "type":"line", "name":"ID2"},
 		],
 		"layout": {
-			"title":"battery info"
+			"title":"load power info"
+		}
+	}
+	t1 = datetime.datetime.now()
+	t1 = t1.strftime("%Y-%m-%d %H:%M:%S")
+
+	printTime("load_p-2")
+	return fig
+
+#####################
+# solar graph
+#####################
+@app.callback(Output('live-graph-solar-v', 'figure'),
+			[Input('interval-component', 'n_intervals')])
+def update_live_graph_solar_v(n):
+	printTime("solar_v-1")
+	# 現在までの湿度データを取得するSQLを生成
+	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+	start_day = (datetime.datetime.now() - datetime.timedelta(days=param_server.WEB_DELTA_SOL)).strftime("%Y-%m-%d %H:%M:%S")
+	li1 = getData(start_day, end_day, 1)
+	li2 = getData(start_day, end_day, 2)
+
+	# dcc.Graphに渡すfigureの作成
+	fig = {
+		"data":[
+			{"x":li1[0], "y":li1[1], "type":"line", "name":"ID1"},
+			{"x":li2[0], "y":li2[1], "type":"line", "name":"ID2"},
+		],
+		"layout": {
+			"title":"solar voltage info"
 		}
 	}
 
-	printTime("battery2")
+	printTime("solar_v-2")
+	return fig
+
+@app.callback(Output('live-graph-solar-i', 'figure'),
+			[Input('interval-component', 'n_intervals')])
+def update_live_graph_solar_i(n):
+	printTime("solar_i-1")
+	# 現在までの湿度データを取得するSQLを生成
+	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+	start_day = (datetime.datetime.now() - datetime.timedelta(days=param_server.WEB_DELTA_SOL)).strftime("%Y-%m-%d %H:%M:%S")
+	li1 = getData(start_day, end_day, 1)
+	li2 = getData(start_day, end_day, 2)
+
+	# dcc.Graphに渡すfigureの作成
+	fig = {
+		"data":[
+			{"x":li1[0], "y":li1[2], "type":"line", "name":"ID1"},
+			{"x":li2[0], "y":li2[2], "type":"line", "name":"ID2"},
+		],
+		"layout": {
+			"title":"solar current info"
+		}
+	}
+
+	printTime("solar_i-2")
+	return fig
+
+@app.callback(Output('live-graph-solar-p', 'figure'),
+			[Input('interval-component', 'n_intervals')])
+def update_live_graph_solar_p(n):
+	printTime("solar_p-1")
+	# 現在までの湿度データを取得するSQLを生成
+	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+	start_day = (datetime.datetime.now() - datetime.timedelta(days=param_server.WEB_DELTA_SOL)).strftime("%Y-%m-%d %H:%M:%S")
+	li1 = getData(start_day, end_day, 1)
+	li2 = getData(start_day, end_day, 2)
+
+	# dcc.Graphに渡すfigureの作成
+	fig = {
+		"data":[
+			{"x":li1[0], "y":li1[3], "type":"line", "name":"ID1"},
+			{"x":li2[0], "y":li2[3], "type":"line", "name":"ID2"},
+		],
+		"layout": {
+			"title":"solar power info"
+		}
+	}
+
+	printTime("solar_p-2")
+	return fig
+
+#####################
+# battery graph
+#####################
+@app.callback(Output('live-graph-battery-v', 'figure'),
+			[Input('interval-component', 'n_intervals')])
+def update_live_graph_battery_v(n):
+	printTime("battery_v-1")
+	# 現在までの湿度データを取得するSQLを生成
+	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+	start_day = (datetime.datetime.now() - datetime.timedelta(days=param_server.WEB_DELTA_SOL)).strftime("%Y-%m-%d %H:%M:%S")
+	li1 = getData(start_day, end_day, 1)
+	li2 = getData(start_day, end_day, 2)
+
+	# dcc.Graphに渡すfigureの作成
+	fig = {
+		"data":[
+			{"x":li1[0], "y":li1[4], "type":"line", "name":"ID1"},
+			{"x":li2[0], "y":li2[4], "type":"line", "name":"ID2"},
+		],
+		"layout": {
+			"title":"battery voltage info"
+		}
+	}
+
+	printTime("battery_v-2")
+	return fig
+
+@app.callback(Output('live-graph-battery-i', 'figure'),
+			[Input('interval-component', 'n_intervals')])
+def update_live_graph_battery_i(n):
+	printTime("battery_i-1")
+	# 現在までの湿度データを取得するSQLを生成
+	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+	start_day = (datetime.datetime.now() - datetime.timedelta(days=param_server.WEB_DELTA_SOL)).strftime("%Y-%m-%d %H:%M:%S")
+	li1 = getData(start_day, end_day, 1)
+	li2 = getData(start_day, end_day, 2)
+
+	# dcc.Graphに渡すfigureの作成
+	fig = {
+		"data":[
+			{"x":li1[0], "y":li1[4], "type":"line", "name":"ID1"},
+			{"x":li2[0], "y":li2[4], "type":"line", "name":"ID2"},
+		],
+		"layout": {
+			"title":"battery current info"
+		}
+	}
+
+	printTime("battery_i-2")
+	return fig
+
+@app.callback(Output('live-graph-battery-p', 'figure'),
+			[Input('interval-component', 'n_intervals')])
+def update_live_graph_battery_p(n):
+	printTime("battery_p-1")
+	# 現在までの湿度データを取得するSQLを生成
+	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+	start_day = (datetime.datetime.now() - datetime.timedelta(days=param_server.WEB_DELTA_SOL)).strftime("%Y-%m-%d %H:%M:%S")
+	li1 = getData(start_day, end_day, 1)
+	li2 = getData(start_day, end_day, 2)
+
+	# dcc.Graphに渡すfigureの作成
+	fig = {
+		"data":[
+			{"x":li1[0], "y":li1[4], "type":"line", "name":"ID1"},
+			{"x":li2[0], "y":li2[4], "type":"line", "name":"ID2"},
+		],
+		"layout": {
+			"title":"battery power info"
+		}
+	}
+
+	printTime("battery_p-2")
 	return fig
 
 

@@ -49,7 +49,7 @@ def getData(start_day, end_day, twe_id):
 	)
 	c = conn.cursor()
 	c.execute( sql )
-#	print( sql )
+	print( sql )
 	fetch = c.fetchall()
 	conn.close()
 
@@ -65,7 +65,7 @@ def printTime(str):
 @app.callback(Output('live-graph-soil', 'figure'),
 			[Input('interval-component', 'n_intervals')])
 def update_live_graph_soil(n):
-#	printTime("soil1:")
+	printTime("soil1:")
 	# 現在までの湿度データを取得するSQLを生成
 	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	start_day = (datetime.datetime.now() - datetime.timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
@@ -81,7 +81,7 @@ def update_live_graph_soil(n):
 		}
 	}
 
-#	printTime("soil2:")
+	printTime("soil2:")
 	return fig
 
 @app.callback(Output('live-graph-temp', 'figure'),
@@ -102,14 +102,14 @@ def update_live_graph_temp(n):
 			"title":"窓際温度"
 		}
 	}
-#	printTime("temp2:")
+	printTime("temp2:")
 
 	return fig
 
 @app.callback(Output('live-graph-hum', 'figure'),
 			[Input('interval-component', 'n_intervals')])
 def update_live_graph_hum(n):
-#	printTime("hum:1")
+	printTime("hum:1")
 	# 現在までの湿度データを取得するSQLを生成
 	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	start_day = (datetime.datetime.now() - datetime.timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
@@ -124,14 +124,14 @@ def update_live_graph_hum(n):
 			"title":"窓際湿度"
 		}
 	}
-#	printTime("hum3:")
+	printTime("hum3:")
 
 	return fig
 
 @app.callback(Output('live-graph-lux', 'figure'),
 			[Input('interval-component', 'n_intervals')])
 def update_live_graph_lux(n):
-#	printTime("lux:1")
+	printTime("lux:1")
 	# 現在までの湿度データを取得するSQLを生成
 	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	start_day = (datetime.datetime.now() - datetime.timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
@@ -146,7 +146,7 @@ def update_live_graph_lux(n):
 			"title":"窓際照度"
 		}
 	}
-#	printTime("lux3:")
+	printTime("lux3:")
 
 	return fig
 

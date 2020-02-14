@@ -6,9 +6,8 @@ from dash.dependencies import Input,Output
 import numpy as np
 import datetime
 import pymysql.cursors
+import param
 
-INTERVAL = 5
-DELTA_DAY = 10
 app = dash.Dash()
 app.layout =  html.Div( children = [
 	html.H2( children = "charge-con graph" ),
@@ -18,7 +17,7 @@ app.layout =  html.Div( children = [
 	dcc.Graph( id = "live-graph-battery" ),
 	dcc.Interval(
 		id = "interval-component",
-		interval = 60000 * INTERVAL,
+		interval = 60000 * param.WEB_INTERVAL_SOL,
 		n_intervals = 0
 	)
 ])
@@ -74,7 +73,7 @@ def update_live_graph_soc(n):
 	printTime("SOC1")
 	# 現在までの湿度データを取得するSQLを生成
 	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-	start_day = (datetime.datetime.now() - datetime.timedelta(days=DELTA_DAY)).strftime("%Y-%m-%d %H:%M:%S")
+	start_day = (datetime.datetime.now() - datetime.timedelta(days=param.WEB_DELTA_SOL)).strftime("%Y-%m-%d %H:%M:%S")
 	li = getData(start_day, end_day, 1)
 
 	# dcc.Graphに渡すfigureの作成
@@ -96,7 +95,7 @@ def update_live_graph_load(n):
 	printTime("liad1")
 	# 現在までの湿度データを取得するSQLを生成
 	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-	start_day = (datetime.datetime.now() - datetime.timedelta(days=DELTA_DAY)).strftime("%Y-%m-%d %H:%M:%S")
+	start_day = (datetime.datetime.now() - datetime.timedelta(days=param.WEB_DELTA_SOL)).strftime("%Y-%m-%d %H:%M:%S")
 	li = getData(start_day, end_day, 1)
 
 	# dcc.Graphに渡すfigureの作成
@@ -121,7 +120,7 @@ def update_live_graph_load(n):
 def update_live_graph_solar(n):
 	# 現在までの湿度データを取得するSQLを生成
 	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-	start_day = (datetime.datetime.now() - datetime.timedelta(days=DELTA_DAY)).strftime("%Y-%m-%d %H:%M:%S")
+	start_day = (datetime.datetime.now() - datetime.timedelta(days=param.WEB_DELTA_SOL)).strftime("%Y-%m-%d %H:%M:%S")
 	li = getData(start_day, end_day, 1)
 
 	# dcc.Graphに渡すfigureの作成
@@ -145,7 +144,7 @@ def update_live_graph_battery(n):
 	printTime("battery1")
 	# 現在までの湿度データを取得するSQLを生成
 	end_day = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-	start_day = (datetime.datetime.now() - datetime.timedelta(days=DELTA_DAY)).strftime("%Y-%m-%d %H:%M:%S")
+	start_day = (datetime.datetime.now() - datetime.timedelta(days=param.WEB_DELTA_SOL)).strftime("%Y-%m-%d %H:%M:%S")
 	li = getData(start_day, end_day, 1)
 
 	# dcc.Graphに渡すfigureの作成
@@ -165,5 +164,5 @@ def update_live_graph_battery(n):
 
 
 if __name__ == "__main__":
-	app.run_server(debug=True, host="172.31.36.179")
+	app.run_server(debug=True, host=param.ADDRESS, port=param.WEB_PORT_SOL
 

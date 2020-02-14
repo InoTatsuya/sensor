@@ -1,9 +1,10 @@
 # coding: UTF-8
 from http.server import BaseHTTPRequestHandler, HTTPServer
-import json
 import datetime
 import pymysql.cursors
 import os
+import param
+
 # mysql settings
 connection = pymysql.connect(
 	host = "localhost",
@@ -12,11 +13,6 @@ connection = pymysql.connect(
 	db = "sensor_db",
 	charset = "utf8")
 cursor = connection.cursor()
-
-f = open( "config_server.json", "r" )
-tmp = f.read()
-tmp = json.loads( tmp )
-f.close()
 
 def createSql( li ):
     if len(li) == 10:
@@ -77,6 +73,6 @@ class Handle(BaseHTTPRequestHandler):
         self.wfile.write(responseBody.encode('utf-8'))
 """
 
-httpd = HTTPServer((tmp["address"], tmp["port"]), Handle)
+httpd = HTTPServer((param.ADDRESS, param.RCV_PORT), Handle)
 print("sensor-data receiver started")
 httpd.serve_forever()

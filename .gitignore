@@ -1,3 +1,4 @@
 config_server.json
 sensor.code-workspace
 param.py
+*.pyc

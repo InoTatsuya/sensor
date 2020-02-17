@@ -2,16 +2,13 @@ from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 import time
 import datetime
 import os
-import json
+import param_edge
+
+serialPort = param_edge.SERIAL_SOL1
 
 id = 1
 
-f = open( "config_rasp.json", "r" )
-tmp = json.loads( f.read() )
-f.close()
-ADDR = tmp[ "address" ]
-
-client = ModbusClient(method = 'rtu', port = '/dev/ttyUSB1', baudrate = 115200)
+client = ModbusClient(method = "rtu", port = serialPort, baudrate = 115200)
 
 def solarInfoGet():
     client.connect()
@@ -66,7 +63,7 @@ while True:
     data = ",".join( map( str, solarInfoGet() ) )
 
     print(data)
-    var = os.system("curl -H 'Content-Type:application/json' -d \"" + data + "\" http://" + ADDR + ":8049 -so -X POST " )
+    var = os.system("curl -H 'Content-Type:application/json' -d \"" + data + "\" http://" + param_edge.ADDRESS + ":" + param_edge.PORT +" -so -X POST " )
     print(var)
 
     time.sleep(10)

@@ -1,16 +1,10 @@
 import serial
 import datetime
 import os
-import json
+import param_edge
 
 # シリアル接続
-ser = serial.Serial("/dev/ttyUSB0",115200)
-
-# sensorhub settings
-f = open( "config_rasp.json", "r" )
-tmp = json.loads( f.read() )
-f.close()
-ADDR = tmp[ "address" ]
+ser = serial.Serial(param_edge.SERIAL_TWE,115200)
 
 def format_conv( st ):
     list = st.split(":")
@@ -26,7 +20,7 @@ def format_conv( st ):
     hu = str(int(list[11][3:])/100)
     data = "\'"+time+"\',"+lq+","+ct+",\'"+ed+"\',\'"+id+"\',"+ba+","+a1+","+a2+","+te+","+hu
     print(data)
-    os.system("curl -H 'Content-Type:application/json' -d " + data + " http://" + ADDR + ":8049 -so -X POST " )
+    os.system("curl -H 'Content-Type:application/json' -d " + data + " http://" + param_edge.ADDRESS + ":" + param_edge.PORT +" -so -X POST " )
 
 while True:
     line = ser.readline().decode("utf-8")

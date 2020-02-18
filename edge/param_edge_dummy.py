@@ -1,6 +1,6 @@
 # server common parameter
 ADDRESS = "hoge"
-PORT = 1234
+PORT = "1234"
 
 # post twelite parameter
 SERIAL_TWE = "hoge"

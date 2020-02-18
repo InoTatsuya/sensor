@@ -2,3 +2,4 @@ config_server.json
 sensor.code-workspace
 param_server.py
 *.pyc
+param_edge.py

@@ -31,8 +31,9 @@ def conv_(s):
 def conv(s):
     list = s.split(":")
     d = {
-        "lq":list[7][3:],
-        "ct":str(int(list[8][3:],16)),
+        "time":datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "lq":list[6][3:],
+        "ct":str(int(list[7][3:],16)),
         "ed":list[8][3:],
         "id":list[9][3:],
         "ba":list[10][3:],
@@ -58,47 +59,23 @@ def hum_test(s):
     time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     d = conv(s)
     if( d["ed"] == "82022F9C" ):
-        print(s)
         f = open("F9C.log","w")
         print(time + "," + d["te"] + "," + d["hu"], file=f )
         f.close()
 
-def createSql( li ):
-    if len(li) == 10:
-        sql = "INSERT INTO sensor_tb VALUES(\'" + \
-        li[0] + "\'," + \
-        li[1] + "," + \
-        li[2] + ",\'" + \
-        li[3] + "\',\'" + \
-        li[4] + "\'," + \
-        li[5] + "," + \
-        li[6] + "," + \
-        li[7] + "," + \
-        li[8] + "," + \
-        li[9] + ")"
-    elif len(li) == 16:
-        sql = "INSERT INTO solar_tb VALUES(\'" + \
-        li[0] + "\'," + \
-        li[1] + "," + \
-        li[2] + "," + \
-        li[3] + "," + \
-        li[4] + "," + \
-        li[5] + "," + \
-        li[6] + "," + \
-        li[7] + "," + \
-        li[8] + "," + \
-        li[9] + "," + \
-        li[10] + "," + \
-        li[11] + "," + \
-        li[12] + "," + \
-        li[13] + "," + \
-        li[14] + "," + \
-        li[15] + ")"
-    return sql
-
-
-def store(s):
-    li = s.split(",")
-    print(li)
-    res = cursor.execute( createSql(li) )
+def mysql(s):
+    d = conv(s)
+    sql = "INSERT INTO sensor_tb VALUES(\'" + \
+    d["time"] + "\'," + \
+    d["lq"] + "," + \
+    d["ct"] + ",\'" + \
+    d["ed"] + "\',\'" + \
+    d["ba"] + "\'," + \
+    d["id"] + "," + \
+    d["a1"] + "," + \
+    d["a2"] + "," + \
+    d["te"] + "," + \
+    d["hu"] + ")"
+    res = cursor.execute( sql )
     connection.commit()
+

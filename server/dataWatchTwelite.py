@@ -20,4 +20,5 @@ try:
         t2 = time.time()
         time.sleep(1)
 except KeyboardInterrupt:
+    print("close\n")
     f.close()

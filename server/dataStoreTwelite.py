@@ -56,12 +56,14 @@ def log(s):
         f.close()
 
 def hum_test(s):
-    time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     d = conv(s)
-    if( d["ed"] == "82022F9C" ):
-        f = open("F9C.log","w")
-        print(time + "," + d["te"] + "," + d["hu"], file=f )
-        f.close()
+    if( d["ed"] == "82025319" ):
+        try:
+            f = open("F9C.log","a")
+            print(d["time"] + "," + d["te"] + "," + d["hu"], file=f )
+            f.close()
+        except KeyboardInterrupt:
+            f.close()
 
 def mysql(s):
     d = conv(s)

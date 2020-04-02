@@ -31,7 +31,7 @@ def conv_(s):
 def conv(s):
     list = s.split(":")
     d = {
-        "time":datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "time":list[0] + ":" + list[1] + ":" + list[2],
         "lq":list[6][3:],
         "ct":str(int(list[7][3:],16)),
         "ed":list[8][3:],

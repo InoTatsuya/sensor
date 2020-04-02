@@ -31,37 +31,37 @@ def conv_(s):
 def conv(s):
     list = s.split(":")
     d = {
-        "lq":list[3][3:],
-        "ct":str(int(list[4][3:],16)),
-        "ed":list[5][3:],
-        "id":list[6][3:],
-        "ba":list[7][3:],
-        "a1":list[8][3:],
-        "a2":list[9][3:],
-        "te":str(int(list[10][3:])/100),
-        "hu":str(int(list[11][3:])/100)
+        "lq":list[7][3:],
+        "ct":str(int(list[8][3:],16)),
+        "ed":list[8][3:],
+        "id":list[9][3:],
+        "ba":list[10][3:],
+        "a1":list[11][3:],
+        "a2":list[12][3:],
+        "te":str(int(list[13][3:])/100),
+        "hu":str(int(list[14][3:])/100)
     }
     return d
 
 def log(s):
     time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    f = open("twelite.log","a")
-    print(time + "," + s, file=f )
-    f.close()
-
     if( dataAnalyseTwelite.format_check(s) == 0 ):
-        d = conv(s)
-        if( d["ed"] == "82022F9C" ):
-            f = open("F9C.log","w")
-            print(time + "," + d["te"] + "," + d["hu"], file=f )
-            f.close()
+        f = open("twelite.log","a")
+        print(time + ":" + s, file=f )
+        f.close()
     elif( dataAnalyseTwelite.format_check(s) > 1 ):
         f = open("twelite_error.log","a")
-        print(time + "," + s, file=f )
+        print(time + ":" + s, file=f )
         f.close()
 
-
+def hum_test(s):
+    time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    d = conv(s)
+    if( d["ed"] == "82022F9C" ):
+        print(s)
+        f = open("F9C.log","w")
+        print(time + "," + d["te"] + "," + d["hu"], file=f )
+        f.close()
 
 def createSql( li ):
     if len(li) == 10:

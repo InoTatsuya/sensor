@@ -59,7 +59,7 @@ def hum_test(s):
     d = conv(s)
     if( d["ed"] == "82025319" ):
         try:
-            f = open("F9C.log","a")
+            f = open("F9C.log","w")
             print(d["time"] + "," + d["te"] + "," + d["hu"], file=f )
             f.close()
         except KeyboardInterrupt:

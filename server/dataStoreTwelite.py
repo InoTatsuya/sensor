@@ -15,6 +15,13 @@ connection = pymysql.connect(
 	charset = "utf8")
 cursor = connection.cursor()
 
+def write(filename, text):
+    file_path = os.path.dirname(filename)
+    if not os.path.exists(file_path):
+        os.makedirs(file_path)
+    with open(filename, 'a') as f:
+        f.write(text + "\n")
+
 def conv_(s):
     list = s.split(":")
     time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -46,15 +53,14 @@ def conv(s):
     return d
 
 def log(s):
-    time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    dirname = "./log"
+    path = datetime.datetime.now().strftime("/%Y/%m/%d/")
+    filename = datetime.datetime.now().strftime("%H") + ".txt"
+    write(dirname + path + filename, s)
     if( dataAnalyseTwelite.format_check(s) == 0 ):
-        f = open("twelite.log","a")
-        print(s, file=f )
-        f.close()
+        write(dirname + "/twelite.log",s)
     elif( dataAnalyseTwelite.format_check(s) > 1 ):
-        f = open("twelite_error.log","a")
-        print(s, file=f )
-        f.close()
+        write(dirname + "/twelite_error.log",s)
 
 def hum_test(s):
     d = conv(s)

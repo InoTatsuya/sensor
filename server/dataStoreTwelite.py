@@ -29,18 +29,19 @@ def conv_(s):
     hu = str(int(list[11][3:])/100)
 
 def conv(s):
-    list = s.split(":")
+    list = s.split(",")[1].split(":")
+    list.insert(0,s.split(",")[0])
     d = {
-        "time":list[0] + ":" + list[1] + ":" + list[2],
-        "lq":list[6][3:],
-        "ct":str(int(list[7][3:],16)),
-        "ed":list[8][3:],
-        "id":list[9][3:],
-        "ba":list[10][3:],
-        "a1":list[11][3:],
-        "a2":list[12][3:],
-        "te":str(int(list[13][3:])/100),
-        "hu":str(int(list[14][3:])/100)
+        "time":list[0],
+        "lq":list[4][3:],
+        "ct":str(int(list[5][3:],16)),
+        "ed":list[6][3:],
+        "id":list[7][3:],
+        "ba":list[8][3:],
+        "a1":list[9][3:],
+        "a2":list[10][3:],
+        "te":str(int(list[11][3:])/100),
+        "hu":str(int(list[12][3:])/100)
     }
     return d
 

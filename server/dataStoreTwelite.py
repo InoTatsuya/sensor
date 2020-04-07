@@ -48,11 +48,11 @@ def log(s):
     time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if( dataAnalyseTwelite.format_check(s) == 0 ):
         f = open("twelite.log","a")
-        print(time + ":" + s, file=f )
+        print(s, file=f )
         f.close()
     elif( dataAnalyseTwelite.format_check(s) > 1 ):
         f = open("twelite_error.log","a")
-        print(time + ":" + s, file=f )
+        print(s, file=f )
         f.close()
 
 def hum_test(s):

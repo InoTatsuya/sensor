@@ -1,7 +1,7 @@
 import re
 
 def format_check(s):
-    li = s.split(":")
+    li = s.split(",")[1].split(":")
     res = 0
 
     if( len( li ) == 12 ):

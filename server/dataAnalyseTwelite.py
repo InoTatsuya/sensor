@@ -27,7 +27,9 @@ def format_check(s):
             res = 11
         if( not re.match("p1=[0-9_]{1,4}",li[11]) and not re.match("hu=[0-9_]{1,5}",li[11]) ):
             res = 12
-    else:
+    elif( len( li ) == 3 ) :
         res = 1
+    else:
+        res = 13
 
     return res
